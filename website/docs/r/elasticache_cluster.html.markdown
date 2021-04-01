@@ -81,7 +81,7 @@ The following arguments are supported:
 
 * `engine_version` – (Optional) Version number of the cache engine to be used.
 See [Describe Cache Engine Versions](https://docs.aws.amazon.com/cli/latest/reference/elasticache/describe-cache-engine-versions.html)
-in the AWS Documentation center for supported versions
+in the AWS Documentation center for supported versions. When `engine` is `redis` and the version is 6 or higher, only the major version can be set, e.g. `6.x`, otherwise, specify the full version desired, e.g. `5.0.6`. The actual engine version used is returned in the attribute `actual_engine_version`, [defined below](#actual_engine_version).
 
 * `maintenance_window` – (Optional) Specifies the weekly time range for when maintenance
 on the cache cluster is performed. The format is `ddd:hh24:mi-ddd:hh24:mi` (24H Clock UTC).
@@ -141,6 +141,7 @@ SNS topic to send ElastiCache notifications to. Example:
 In addition to all arguments above, the following attributes are exported:
 
 * `arn` - The ARN of the created ElastiCache Cluster.
+* `actual_engine_version` - The running version of the cache engine.
 * `cache_nodes` - List of node objects including `id`, `address`, `port` and `availability_zone`.
 * `configuration_endpoint` - (Memcached only) The configuration endpoint to allow host discovery.
 * `cluster_address` - (Memcached only) The DNS name of the cache cluster without the port appended.
