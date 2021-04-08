@@ -1536,6 +1536,21 @@ func resourceAwsInstanceUpdate(d *schema.ResourceData, meta interface{}) error {
 func resourceAwsInstanceDelete(d *schema.ResourceData, meta interface{}) error {
 	conn := meta.(*AWSClient).ec2conn
 
+	// false = enable api termination
+	// true = disable api termination (protected)
+	if !d.Get("disable_api_termination").(bool) {
+		_, err := conn.ModifyInstanceAttribute(&ec2.ModifyInstanceAttributeInput{
+			InstanceId: aws.String(d.Id()),
+			DisableApiTermination: &ec2.AttributeBooleanValue{
+				Value: aws.Bool(d.Get("disable_api_termination").(bool)),
+			},
+		})
+
+		if err != nil {
+			log.Printf("[WARN] attempting to terminate EC2 instance (%s) despite error enabling API termination: %s", d.Id(), err)
+		}
+	}
+
 	err := awsTerminateInstance(conn, d.Id(), d.Timeout(schema.TimeoutDelete))
 
 	if err != nil {
