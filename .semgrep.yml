@@ -158,15 +158,12 @@ rules:
       include:
         - aws/data_source_aws_*.go
     patterns:
-      - pattern: $RESOURCE_READ
+      - pattern-regex: '(resource.+Read|flatten.+Resource)'
       - pattern-inside: func $FUNCNAME(...) error { ... }
       - pattern-not-inside: |
           d.Set(..., []interface{}{ ... })
       - pattern-not-inside: |
           d.Set($ATTRIBUTE, $FUNC($APIOBJECT))
-      - metavariable-regex:
-          metavariable: "$RESOURCE_READ"
-          regex: '(resource.+Read|flatten.+Resource)'
       - metavariable-regex:
           metavariable: "$FUNCNAME"
           regex: "dataSource.+Read"
