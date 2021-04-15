@@ -36,7 +36,6 @@ func resourceAwsEcsCapacityProvider() *schema.Resource {
 				Type:     schema.TypeList,
 				MaxItems: 1,
 				Required: true,
-				ForceNew: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"auto_scaling_group_arn": {
@@ -49,7 +48,6 @@ func resourceAwsEcsCapacityProvider() *schema.Resource {
 							Type:     schema.TypeString,
 							Optional: true,
 							Computed: true,
-							ForceNew: true,
 							ValidateFunc: validation.StringInSlice([]string{
 								ecs.ManagedTerminationProtectionEnabled,
 								ecs.ManagedTerminationProtectionDisabled,
@@ -60,35 +58,30 @@ func resourceAwsEcsCapacityProvider() *schema.Resource {
 							MaxItems: 1,
 							Optional: true,
 							Computed: true,
-							ForceNew: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"instance_warmup_period": {
 										Type:         schema.TypeInt,
 										Optional:     true,
 										Computed:     true,
-										ForceNew:     true,
 										ValidateFunc: validation.IntBetween(1, 10000),
 									},
 									"maximum_scaling_step_size": {
 										Type:         schema.TypeInt,
 										Optional:     true,
 										Computed:     true,
-										ForceNew:     true,
 										ValidateFunc: validation.IntBetween(1, 10000),
 									},
 									"minimum_scaling_step_size": {
 										Type:         schema.TypeInt,
 										Optional:     true,
 										Computed:     true,
-										ForceNew:     true,
 										ValidateFunc: validation.IntBetween(1, 10000),
 									},
 									"status": {
 										Type:     schema.TypeString,
 										Optional: true,
 										Computed: true,
-										ForceNew: true,
 										ValidateFunc: validation.StringInSlice([]string{
 											ecs.ManagedScalingStatusEnabled,
 											ecs.ManagedScalingStatusDisabled,
@@ -97,7 +90,6 @@ func resourceAwsEcsCapacityProvider() *schema.Resource {
 										Type:         schema.TypeInt,
 										Optional:     true,
 										Computed:     true,
-										ForceNew:     true,
 										ValidateFunc: validation.IntBetween(1, 100),
 									},
 								},
