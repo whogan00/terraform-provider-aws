@@ -37,6 +37,23 @@ func CapacityProviderInactive(conn *ecs.ECS, capacityProvider string) (*ecs.Capa
 	return nil, err
 }
 
+func CapacityProviderUpdate(conn *ecs.ECS, capacityProvider string) (*ecs.CapacityProvider, error) {
+	stateConf := &resource.StateChangeConf{
+		Pending: []string{ecs.CapacityProviderUpdateStatusUpdateInProgress},
+		Target:  []string{ecs.CapacityProviderUpdateStatusUpdateComplete},
+		Refresh: CapacityProviderStatus(conn, capacityProvider),
+		Timeout: CapacityProviderInactiveTimeout,
+	}
+
+	outputRaw, err := stateConf.WaitForState()
+
+	if v, ok := outputRaw.(*ecs.CapacityProvider); ok {
+		return v, err
+	}
+
+	return nil, err
+}
+
 func ServiceStable(conn *ecs.ECS, id, cluster string) error {
 	input := &ecs.DescribeServicesInput{
 		Services: aws.StringSlice([]string{id}),

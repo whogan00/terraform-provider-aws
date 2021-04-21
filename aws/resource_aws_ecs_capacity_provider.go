@@ -195,6 +195,10 @@ func resourceAwsEcsCapacityProviderUpdate(d *schema.ResourceData, meta interface
 		if err != nil {
 			return fmt.Errorf("error changing ECS capacity provider (%s): %s", d.Id(), err)
 		}
+
+		if _, err := waiter.CapacityProviderUpdate(conn, d.Id()); err != nil {
+			return fmt.Errorf("error changing ECS capacity provider (%s): %s", d.Id(), err)
+		}
 	}
 
 	if d.HasChange("tags") {
