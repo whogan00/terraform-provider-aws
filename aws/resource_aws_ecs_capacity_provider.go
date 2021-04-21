@@ -182,7 +182,10 @@ func resourceAwsEcsCapacityProviderRead(d *schema.ResourceData, meta interface{}
 func resourceAwsEcsCapacityProviderUpdate(d *schema.ResourceData, meta interface{}) error {
 	conn := meta.(*AWSClient).ecsconn
 
+	log.Println("[DEBUG] In capacity provider update")
+
 	if d.HasChange("auto_scaling_group_provider") {
+		log.Println("[DEBUG] In autoscale has change")
 		input := ecs.UpdateCapacityProviderInput{
 			Name:                     aws.String(d.Id()),
 			AutoScalingGroupProvider: expandAutoScalingGroupProviderUpdate(d.Get("auto_scaling_group_provider")),
