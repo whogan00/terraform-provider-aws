@@ -46,6 +46,26 @@ func CapacityProviderStatus(conn *ecs.ECS, capacityProvider string) resource.Sta
 	}
 }
 
+func CapacityProviderUpdateStatus(conn *ecs.ECS, capacityProvider string) resource.StateRefreshFunc {
+	return func() (interface{}, string, error) {
+		input := &ecs.DescribeCapacityProvidersInput{
+			CapacityProviders: aws.StringSlice([]string{capacityProvider}),
+		}
+
+		output, err := conn.DescribeCapacityProviders(input)
+
+		if err != nil {
+			return nil, CapacityProviderStatusUnknown, err
+		}
+
+		if len(output.CapacityProviders) == 0 {
+			return nil, CapacityProviderStatusNotFound, nil
+		}
+
+		return output.CapacityProviders[0], aws.StringValue(output.CapacityProviders[0].UpdateStatus), nil
+	}
+}
+
 func ServiceStatus(conn *ecs.ECS, id, cluster string) resource.StateRefreshFunc {
 	return func() (interface{}, string, error) {
 		input := &ecs.DescribeServicesInput{

@@ -41,7 +41,7 @@ func CapacityProviderUpdate(conn *ecs.ECS, capacityProvider string) (*ecs.Capaci
 	stateConf := &resource.StateChangeConf{
 		Pending: []string{ecs.CapacityProviderUpdateStatusUpdateInProgress},
 		Target:  []string{ecs.CapacityProviderUpdateStatusUpdateComplete},
-		Refresh: CapacityProviderStatus(conn, capacityProvider),
+		Refresh: CapacityProviderUpdateStatus(conn, capacityProvider),
 		Timeout: CapacityProviderInactiveTimeout,
 	}
 
